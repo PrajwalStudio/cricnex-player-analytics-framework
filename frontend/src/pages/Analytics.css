@@ -1,0 +1,181 @@
+.analytics-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.matchup-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 16px;
+  margin-bottom: 32px;
+  align-items: end;
+}
+
+.matchup-results {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 2px solid #f0f0f0;
+  animation: fadeIn 0.3s ease;
+}
+
+.matchup-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.matchup-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.matchup-matches {
+  font-size: 14px;
+  color: #666;
+}
+
+.matchup-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.matchup-stat-card {
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.matchup-stat-label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.matchup-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.performances-section {
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.performances-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1a1a1a;
+}
+
+.performances-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.performance-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.performance-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.perf-runs {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2563eb;
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.perf-details {
+  flex: 1;
+}
+
+.perf-venue {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.perf-sr {
+  font-size: 13px;
+  color: #666;
+}
+
+.perf-date {
+  font-size: 13px;
+  color: #999;
+  font-weight: 500;
+}
+
+@media (max-width: 968px) {
+  .matchup-form {
+    grid-template-columns: 1fr;
+  }
+
+  .matchup-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .matchup-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .performance-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .perf-details {
+    order: -1;
+  }
+  
+  .chart-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .page-title {
+    font-size: 20px;
+  }
+  
+  .page-subtitle {
+    font-size: 13px;
+  }
+  
+  .card-title {
+    font-size: 16px;
+  }
+  
+  .matchup-form input {
+    font-size: 14px;
+  }
+}
