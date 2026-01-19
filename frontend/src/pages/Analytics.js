@@ -222,9 +222,16 @@ const Analytics = () => {
 
             {matchupData.performances && matchupData.performances.length > 0 && (
               <div className="performances-section">
-                <h4 className="performances-title">Performance History</h4>
+                <h4 className="performances-title">
+                  Recent Performance History 
+                  {matchupData.performances.length > 0 && (
+                    <span style={{ fontSize: '0.85em', fontWeight: 'normal', color: '#666', marginLeft: '10px' }}>
+                      (Showing {Math.min(10, matchupData.performances.length)} most recent)
+                    </span>
+                  )}
+                </h4>
                 <div className="performances-list">
-                  {matchupData.performances.slice(0, 5).map((perf, index) => (
+                  {matchupData.performances.slice(0, 10).map((perf, index) => (
                     <div key={index} className="performance-item">
                       <div className="perf-runs">{perf.runs_scored}</div>
                       <div className="perf-details">
@@ -232,7 +239,11 @@ const Analytics = () => {
                         <div className="perf-sr">SR: {perf.strike_rate?.toFixed(1)}</div>
                       </div>
                       <div className="perf-date">
-                        {new Date(perf.date).toLocaleDateString()}
+                        {new Date(perf.date).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'short', 
+                          day: 'numeric' 
+                        })}
                       </div>
                     </div>
                   ))}

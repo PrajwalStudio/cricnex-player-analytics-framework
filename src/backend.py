@@ -690,6 +690,13 @@ class CricNexBackend:
                         'message': 'No matchup data found'
                     }), 200
                 
+                # Sort by date descending and get only the most recent performances
+                if 'date' in matchup_data.columns:
+                    matchup_data = matchup_data.sort_values('date', ascending=False)
+                    recent_performances = matchup_data.head(10)  # Get top 10 most recent
+                else:
+                    recent_performances = matchup_data.tail(10)
+                
                 stats = {
                     'player': player,
                     'opponent': opponent,
@@ -698,7 +705,7 @@ class CricNexBackend:
                     'avg_runs': round(matchup_data['runs_scored'].mean(), 2),
                     'highest_score': int(matchup_data['runs_scored'].max()),
                     'avg_strike_rate': round(matchup_data['strike_rate'].mean(), 2),
-                    'performances': matchup_data[['date', 'runs_scored', 'strike_rate', 'venue']].to_dict('records')
+                    'performances': recent_performances[['date', 'runs_scored', 'strike_rate', 'venue']].to_dict('records')
                 }
                 
                 return jsonify(stats), 200
