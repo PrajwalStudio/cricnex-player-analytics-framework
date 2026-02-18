@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: cricnex-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --chdir src wsgi:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.10.0

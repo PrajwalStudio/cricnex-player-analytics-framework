@@ -56,12 +56,14 @@ Thumbs.db
 desktop.ini
 
 # Project specific
-models/*.pkl
-!models/.gitkeep
-data/features.csv
+# models included in git (total ~43MB, under 100MB GitHub limit)
 results/*.png
 test_results.json
 *.log
+
+# Large dataset CSVs
+ballbyball/
+completedataset/
 
 # Jupyter
 .ipynb_checkpoints/
