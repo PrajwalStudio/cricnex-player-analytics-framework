@@ -37,10 +37,10 @@ class MongoDBHandler:
             # Create indexes for better performance
             self._create_indexes()
             
-            print(f"✓ MongoDB connected: {database_name}")
+            print(f"MongoDB connected: {database_name}")
             
         except Exception as e:
-            print(f"⚠ MongoDB connection failed: {e}")
+            print(f"Warning: MongoDB connection failed: {e}")
             print("  Continuing without MongoDB...")
             self.client = None
             self.db = None
@@ -65,7 +65,7 @@ class MongoDBHandler:
             self.match_analytics.create_index([('date', DESCENDING)])
             
         except Exception as e:
-            print(f"⚠ Error creating indexes: {e}")
+            print(f"Warning: Error creating indexes: {e}")
     
     def is_connected(self) -> bool:
         """Check if MongoDB is connected"""
@@ -309,7 +309,7 @@ class MongoDBHandler:
         """Close MongoDB connection"""
         if self.client:
             self.client.close()
-            print("✓ MongoDB connection closed")
+            print("MongoDB connection closed")
 
 
 if __name__ == "__main__":
@@ -332,12 +332,11 @@ if __name__ == "__main__":
         }
         
         pred_id = handler.save_prediction(test_prediction)
-        print(f"✓ Test prediction saved with ID: {pred_id}")
+        print(f"Test prediction saved with ID: {pred_id}")
         
-        # Get stats
         stats = handler.get_prediction_stats()
-        print(f"✓ Total predictions in DB: {stats.get('total_predictions', 0)}")
+        print(f"Total predictions in DB: {stats.get('total_predictions', 0)}")
         
         handler.close()
     else:
-        print("\n❌ MongoDB not available")
+        print("\nMongoDB not available")

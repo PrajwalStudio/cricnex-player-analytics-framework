@@ -43,41 +43,30 @@ class ModelTrainer:
                      test_size: float = 0.2, random_state: int = 42):
         """
         Prepare train-test split with feature scaling
-        
-        Args:
-            target_variable: Target column name
-            test_size: Proportion of test data
-            random_state: Random seed for reproducibility
         """
-        print("\n📊 Preparing data for training...")
+        print("\nPreparing data for training...")
         
-        # Define feature columns
         exclude_cols = [
             target_variable, 'match_id', 'player', 'team', 'opponent', 'venue',
             'date', 'balls_faced', 'extra_runs', 'season', 'is_valid_ball'
         ]
         
         self.feature_columns = [col for col in self.df.columns if col not in exclude_cols]
-        
-        # Handle missing values
         self.df[self.feature_columns] = self.df[self.feature_columns].fillna(0)
         
-        # Prepare X and y
         X = self.df[self.feature_columns]
         y = self.df[target_variable]
         
-        # Train-test split
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
             X, y, test_size=test_size, random_state=random_state, shuffle=True
         )
         
-        # Scale features
         self.X_train_scaled = self.scaler.fit_transform(self.X_train)
         self.X_test_scaled = self.scaler.transform(self.X_test)
         
-        print(f"✓ Training set: {len(self.X_train):,} samples")
-        print(f"✓ Test set: {len(self.X_test):,} samples")
-        print(f"✓ Features: {len(self.feature_columns)}")
+        print(f"Training set: {len(self.X_train):,} samples")
+        print(f"Test set: {len(self.X_test):,} samples")
+        print(f"Features: {len(self.feature_columns)}")
         
     def evaluate_model(self, model_name: str, y_pred: np.ndarray) -> Dict[str, float]:
         """
@@ -109,13 +98,8 @@ class ModelTrainer:
                            random_state: int = 42):
         """
         Train Random Forest model
-        
-        Args:
-            n_estimators: Number of trees
-            max_depth: Maximum depth of trees
-            random_state: Random seed
         """
-        print("\n🌲 Training Random Forest...")
+        print("\nTraining Random Forest...")
         
         model = RandomForestRegressor(
             n_estimators=n_estimators,
@@ -137,9 +121,9 @@ class ModelTrainer:
             'metrics': results
         }
         
-        print(f"✓ MAE: {results['test_mae']:.2f}")
-        print(f"✓ RMSE: {results['test_rmse']:.2f}")
-        print(f"✓ R²: {results['test_r2']:.4f}")
+        print(f"MAE: {results['test_mae']:.2f}")
+        print(f"RMSE: {results['test_rmse']:.2f}")
+        print(f"R2: {results['test_r2']:.4f}")
         
         return model, results
     
@@ -147,14 +131,8 @@ class ModelTrainer:
                      max_depth: int = 6, random_state: int = 42):
         """
         Train XGBoost model
-        
-        Args:
-            n_estimators: Number of boosting rounds
-            learning_rate: Learning rate
-            max_depth: Maximum tree depth
-            random_state: Random seed
         """
-        print("\n⚡ Training XGBoost...")
+        print("\nTraining XGBoost...")
         
         model = xgb.XGBRegressor(
             n_estimators=n_estimators,
@@ -177,23 +155,18 @@ class ModelTrainer:
             'metrics': results
         }
         
-        print(f"✓ MAE: {results['test_mae']:.2f}")
-        print(f"✓ RMSE: {results['test_rmse']:.2f}")
-        print(f"✓ R²: {results['test_r2']:.4f}")
+        print(f"MAE: {results['test_mae']:.2f}")
+        print(f"RMSE: {results['test_rmse']:.2f}")
+        print(f"R2: {results['test_r2']:.4f}")
         
         return model, results
     
     def train_arima(self):
         """
-        Train ARIMA model for time series prediction
-        (Simplified version - uses rolling average as baseline)
+        Train ARIMA baseline model
         """
-        print("\n📈 Training ARIMA (Time Series Baseline)...")
+        print("\nTraining ARIMA...")
         
-        # Simple time series baseline using last 5 match average
-        # In production, would use statsmodels ARIMA
-        
-        # Get last 5 match average from features
         if 'runs_last_5_avg' in self.X_test.columns:
             y_pred = self.X_test['runs_last_5_avg'].values
         else:
@@ -201,7 +174,6 @@ class ModelTrainer:
         
         results = self.evaluate_model('arima', y_pred)
         
-        # Store as simple model
         class ARIMABaseline:
             def __init__(self, mean_value):
                 self.mean_value = mean_value
@@ -220,18 +192,17 @@ class ModelTrainer:
             'metrics': results
         }
         
-        print(f"✓ MAE: {results['test_mae']:.2f}")
-        print(f"✓ RMSE: {results['test_rmse']:.2f}")
-        print(f"✓ R²: {results['test_r2']:.4f}")
+        print(f"MAE: {results['test_mae']:.2f}")
+        print(f"RMSE: {results['test_rmse']:.2f}")
+        print(f"R2: {results['test_r2']:.4f}")
         
         return model, results
     
     def train_lstm(self, sequence_length: int = 5, epochs: int = 20, batch_size: int = 32):
         """
-        Train LSTM model (requires tensorflow)
-        (Simplified version - uses neural network baseline)
+        Train LSTM neural network model
         """
-        print("\n🧠 Training LSTM (Neural Network)...")
+        print("\nTraining LSTM...")
         
         try:
             from sklearn.neural_network import MLPRegressor
@@ -256,14 +227,14 @@ class ModelTrainer:
                 'metrics': results
             }
             
-            print(f"✓ MAE: {results['test_mae']:.2f}")
-            print(f"✓ RMSE: {results['test_rmse']:.2f}")
-            print(f"✓ R²: {results['test_r2']:.4f}")
+            print(f"MAE: {results['test_mae']:.2f}")
+            print(f"RMSE: {results['test_rmse']:.2f}")
+            print(f"R2: {results['test_r2']:.4f}")
             
             return model, results
             
         except ImportError:
-            print("⚠ Neural network library not available, skipping LSTM")
+            print("Warning: Neural network library not available, skipping LSTM")
             return None, None
     
     def get_best_model(self) -> Tuple[str, Dict]:

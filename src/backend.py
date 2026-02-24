@@ -19,7 +19,7 @@ try:
     MONGODB_AVAILABLE = True
 except ImportError:
     MONGODB_AVAILABLE = False
-    print("⚠ MongoDB handler not available")
+    print("Warning: MongoDB handler not available")
 
 
 class CricNexBackend:
@@ -52,9 +52,9 @@ class CricNexBackend:
             try:
                 self.mongo = MongoDBHandler()
                 if self.mongo.is_connected():
-                    print("✓ MongoDB integration enabled")
+                    print("MongoDB integration enabled")
             except Exception as e:
-                print(f"⚠ MongoDB initialization failed: {e}")
+                print(f"Warning: MongoDB initialization failed: {e}")
                 self.mongo = None
         
         # Load model and data
@@ -75,14 +75,14 @@ class CricNexBackend:
         """Load trained model"""
         if os.path.exists(model_path):
             self.model_data = joblib.load(model_path)
-            print(f"✓ Model loaded: {self.model_data['model_name']}")
+            print(f"Model loaded: {self.model_data['model_name']}")
         else:
-            print(f"⚠ Model not found: {model_path}")
+            print(f"Warning: Model not found: {model_path}")
     
     def load_all_models(self, models_dir: str):
         """Load all available models from directory"""
         if not os.path.exists(models_dir):
-            print(f"⚠ Models directory not found: {models_dir}")
+            print(f"Warning: Models directory not found: {models_dir}")
             return
         
         model_files = [f for f in os.listdir(models_dir) if f.endswith('.pkl')]
@@ -93,22 +93,21 @@ class CricNexBackend:
                 model_data = joblib.load(model_path)
                 model_name = model_data.get('model_name', model_file.replace('.pkl', ''))
                 self.all_models[model_name] = model_data
-                print(f"  ✓ Loaded {model_name}")
+                print(f"  Loaded {model_name}")
             except Exception as e:
-                print(f"  ⚠ Could not load {model_file}: {str(e)}")
+                print(f"  Warning: Could not load {model_file}: {str(e)}")
         
-        print(f"✓ Total models loaded: {len(self.all_models)}")
+        print(f"Total models loaded: {len(self.all_models)}")
     
     def load_features(self, features_path: str):
         """Load feature dataset"""
         if os.path.exists(features_path):
             self.features_df = pd.read_csv(features_path)
-            # Convert date column to datetime for proper sorting
             if 'date' in self.features_df.columns:
                 self.features_df['date'] = pd.to_datetime(self.features_df['date'], errors='coerce')
-            print(f"✓ Features loaded: {len(self.features_df)} records")
+            print(f"Features loaded: {len(self.features_df)} records")
         else:
-            print(f"⚠ Features not found: {features_path}")
+            print(f"Warning: Features not found: {features_path}")
     
     def prepare_statistics(self):
         """Prepare aggregated statistics for fast retrieval"""
@@ -179,10 +178,10 @@ class CricNexBackend:
                     analytics_data=analytics_data
                 )
             
-            print(f"✓ Synced {len(self.players_stats)} player analytics to MongoDB")
+            print(f"Synced {len(self.players_stats)} player analytics to MongoDB")
             
         except Exception as e:
-            print(f"⚠ Error syncing player analytics: {e}")
+            print(f"Warning: Error syncing player analytics: {e}")
     
     def setup_routes(self):
         """Setup all API routes"""
@@ -1139,7 +1138,7 @@ class CricNexBackend:
         print(f"  Teams: {len(self.teams_stats) if self.teams_stats is not None else 0}")
         print(f"  Venues: {len(self.venues_stats) if self.venues_stats is not None else 0}")
         print("=" * 70)
-        print("\n  📡 API Endpoints:")
+        print("\n  API Endpoints:")
         print("     POST   /api/predict")
         print("     POST   /api/predict/batch")
         print("     GET    /api/players")
